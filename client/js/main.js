@@ -6,21 +6,23 @@ const input = document.getElementById('input');
 const statusText = document.getElementById('status');
 const messagesContainer = document.getElementById('messages');
 
-const output = document.createElement('p');
-output.id = 'output';
-document.querySelector('.inpt-text').appendChild(output);
+// const output = document.createElement('p');
+// output.id = 'output';
+// document.querySelector('.inpt-text').appendChild(output);
 
 socket.addEventListener('open', () => {
     // console.log('Connection established!');
     statusText.textContent = 'Connected';
     statusText.classList.add('status-connected');
-    socket.send('Hello, David!');
+    // socket.send('Hello, David!');
 });
 
 
 socket.addEventListener('message', (event) => {
-    console.log('Message from server:', event.data);
-    output.textContent = event.data;
+    const message = document.createElement('p');
+    messagesContainer.append(message)
+    // console.log('Message from server:', event.data);
+    message.textContent = event.data;
 });
 
 socket.addEventListener('close', () => {

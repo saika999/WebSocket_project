@@ -20,19 +20,46 @@ body {
     padding: 24px 0;
     background: #357681;
 }
+
 .wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .status {
     transition: color 0.3s ease;
 }
 
 .status-connected {
-    color: #2ecc71; 
+    color: #2ecc71;
 }
 
 .status-disconnected {
-    color: #e74c3c; 
+    color: #e74c3c;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #599fb8;
+    padding: 20px;
+    margin-bottom: 35px;
+    border: 1px solid #0c0b0b;
+
+
+    p {
+        background: #7fb46f;
+        display: inline-block;
+        padding: 3px 19px;
+        border: 1px solid #000;
+        border-radius: 10px;
+    }
+}
+
+p:nth-of-type(even) {
+    margin-left: 50px;
+    color: #1b3038;
+    background: #547549;
 }
