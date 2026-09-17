@@ -1,0 +1,38 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(#23ddcc, #ccddcc);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.header {
+    padding: 24px 0;
+    background: #357681;
+}
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.status {
+    transition: color 0.3s ease;
+}
+
+.status-connected {
+    color: #2ecc71; 
+}
+
+.status-disconnected {
+    color: #e74c3c; 
+}
