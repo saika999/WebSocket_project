@@ -13,12 +13,16 @@ server.on('connection', (socket) => {
     socket.on('message', (message) => {
         console.log('Message:', message.toString());
 
-        socket.send(message.toString())
+        server.clients.forEach((client) => {
+            if (client.readyState === Websocket.OPEN) {
+                client.send(message.toString())
+            }
+        })
     })
 
     socket.on('close', () => {
         console.log(`Client disconnected!`);
-        
+
     })
-       
+
 })
