@@ -1,28 +1,44 @@
-const Websocket = require('ws');
+const WebSocket = require('ws');
+const sqlite3 = require('sqlite3').verbose();
 
-const server = new Websocket.Server({
+const server = new WebSocket.Server({
     port: 3000
-})
+});
+const db = new sqlite3.Database('./chat.db');
 
-console.log('Websokcet server started on port 3000');
+db.run(`CREATE TABLE IF NOT EXISTS messages ( id INTEGER PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP )`,
+    (error) => {
+        if (error) { console.error('Database error:', error); return; } console.log('Messages table is ready')
+    });
+console.log('Database connected');
 
+console.log('WebSocket server started on port 3000');
 
 server.on('connection', (socket) => {
-    console.log('Connected');
+
+    console.log('Client connected');
 
     socket.on('message', (message) => {
+
         console.log('Message:', message.toString());
 
+        db.run('INSERT INTO messages (message) VALUES (?)', [text], (error) => { if (error) { console.error('Save error:', error); return; } console.log('Message saved:', text); });
+
         server.clients.forEach((client) => {
-            if (client.readyState === Websocket.OPEN) {
-                client.send(message.toString())
+
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString());
             }
-        })
-    })
+
+        });
+
+    });
 
     socket.on('close', () => {
-        console.log(`Client disconnected!`);
+        console.log('Client disconnected');
+    });
 
-    })
+});
 
-})
+
+
