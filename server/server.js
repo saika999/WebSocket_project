@@ -20,14 +20,16 @@ server.on('connection', (socket) => {
 
     socket.on('message', (message) => {
 
-        console.log('Message:', message.toString());
+        const text = message.toString();
+
+        console.log('Message:', text);
 
         db.run('INSERT INTO messages (message) VALUES (?)', [text], (error) => { if (error) { console.error('Save error:', error); return; } console.log('Message saved:', text); });
 
         server.clients.forEach((client) => {
 
             if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString());
+                client.send(text);
             }
 
         });
