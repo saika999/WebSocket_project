@@ -14,9 +14,10 @@ socket.addEventListener('open', () => {
 
 
 socket.addEventListener('message', (event) => {
+    const data = JSON.parse(event.data);
     const message = document.createElement('p');
-    messagesContainer.append(message)
-    message.textContent = event.data;
+    message.textContent = new Date(data.date).toLocaleString() + ' ' + data.message;
+    messagesContainer.append(message);
 });
 
 socket.addEventListener('close', () => {
