@@ -42,17 +42,53 @@ server.on('connection', (socket) => {
         const date = new Date().toISOString();
 
         console.log('Message:', text);
+        // -----------------------
+        db.run(
+            'INSERT INTO messages (message) VALUES (?)',
+            [text],
+            function (error) {
 
-        db.run('INSERT INTO messages (message, date) VALUES (?, ?)', [text, date], (error) => {
-            if (error) { console.error('Save error:', error); return; }
-            console.log('Message saved:', text);
-        });
+                if (error) {
+                    console.error('Save error:', error);
+                    return;
+                }
 
-        server.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify({ message: text, date: date }));
+                const messageId = this.lastID;
+
+                console.log('Message saved:', text);
+
+                db.get(
+                    'SELECT * FROM messages WHERE id = ?',
+                    [messageId],
+                    (error, row) => {
+
+                        if (error) {
+                            console.error('Read error:', error);
+                            return;
+                        }
+
+                        const data_message = {
+                            message: row.message,
+                            date: row.date
+                        };
+
+                        server.clients.forEach(client => {
+
+                            if (client.readyState === WebSocket.OPEN) {
+                                client.send(JSON.stringify(data_message));
+                            }
+
+                        });
+                    }
+                );
             }
-        });
+        );
+        // ----------------------------------------
+        // server.clients.forEach((client) => {
+        //     if (client.readyState === WebSocket.OPEN) {
+        //         client.send(JSON.stringify({ message: text, date: date }));
+        //     }
+        // });
 
     });
 
