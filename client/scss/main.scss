@@ -52,7 +52,7 @@ body {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     scroll-behavior: smooth;
 
-    p {
+    .message {
         max-width: 75%;
         width: fit-content;
         padding: 8px 14px;
@@ -65,12 +65,18 @@ body {
         align-self: flex-start;
     }
 
-    p:nth-of-type(even) {
+
+
+    .message:nth-of-type(even) {
         align-self: flex-end;
         color: #e8f3e4;
         background: #547549;
         border-bottom-left-radius: 18px;
         border-bottom-right-radius: 4px;
+    }
+
+    span {
+        font-size: 10px;
     }
 }
 
