@@ -27,6 +27,8 @@ server.on('connection', (socket) => {
         console.log('History:', rows);
         rows.forEach(row => {
             const data_message = {
+                type: 'message',
+                id: row.id,
                 message: row.message,
                 date: row.date
 
@@ -38,11 +40,36 @@ server.on('connection', (socket) => {
 
     socket.on('message', (message) => {
 
-        const text = message.toString();
-        const date = new Date().toISOString();
+        let data;
+        try {
+            data = JSON.parse(message.toString());
+        } catch {
+            socket.send(JSON.stringify({ type: 'error', message: 'Некорректный запрос' }));
+            return;
+        }
+        if (data?.type === 'delete') {
+            if (!Number.isSafeInteger(data.id) || data.id <= 0) return;
+            db.run('DELETE FROM messages WHERE id = ?', [data.id], function (error) {
+                if (error) {
+                    console.error('Delete error:', error);
+                    if (socket.readyState === WebSocket.OPEN) {
+                        socket.send(JSON.stringify({ type: 'error', message: 'Не удалось удалить сообщение' }));
+                    }
+                    return;
+                }
+                server.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(JSON.stringify({ type: 'delete', id: data.id }));
+                    }
+                });
+            });
+            return;
+        }
+
+        if (data?.type !== 'message' || typeof data.message !== 'string' || !data.message.trim()) return;
+        const text = data.message;
 
         console.log('Message:', text);
-        // -----------------------
         db.run(
             'INSERT INTO messages (message) VALUES (?)',
             [text],
@@ -66,8 +93,9 @@ server.on('connection', (socket) => {
                             console.error('Read error:', error);
                             return;
                         }
-
                         const data_message = {
+                            type: 'message',
+                            id: row.id,
                             message: row.message,
                             date: row.date
                         };
@@ -83,13 +111,6 @@ server.on('connection', (socket) => {
                 );
             }
         );
-        // ----------------------------------------
-        // server.clients.forEach((client) => {
-        //     if (client.readyState === WebSocket.OPEN) {
-        //         client.send(JSON.stringify({ message: text, date: date }));
-        //     }
-        // });
-
     });
 
     socket.on('close', () => {
@@ -97,6 +118,3 @@ server.on('connection', (socket) => {
     });
 
 });
-
-
-

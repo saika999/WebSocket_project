@@ -19,18 +19,44 @@ socket.addEventListener('message', (event) => {
     //     message.textContent = new Date(data.date).toLocaleString() + ' ' + data.message;
     //     messagesContainer.append(message);
     const data = JSON.parse(event.data);
+    if (data.type === 'delete') {
+        messagesContainer.querySelector(`[data-message-id="${data.id}"]`)?.remove();
+        return;
+    }
+    if (data.type === 'error') {
+        alert(data.message);
+        return;
+    }
 
     const message = document.createElement('div');
     const text = document.createElement('p');
     const time = document.createElement('span');
+    const deleteBtn = document.createElement('button');
 
     message.classList.add('message');
+    message.dataset.messageId = data.id;
 
     text.textContent = data.message;
     time.textContent = data.date;
+    deleteBtn.type = ('button');
+    deleteBtn.classList.add('message-delete');
+    deleteBtn.textContent = '❌';
+    deleteBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if(socket.readyState !== WebSocket.OPEN) {
+            alert('Нет подключения к серверу!');
+            return;
+        }
+        deleteBtn.disabled = true;
+        socket.send(JSON.stringify({type:'delete', id:data.id}));
+    });
+     
 
     message.append(text);
-    message.append(time);
+    message.append(time); 
+    message.append(deleteBtn);
 
     messagesContainer.append(message);
 });
