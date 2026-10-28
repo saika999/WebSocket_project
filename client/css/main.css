@@ -20,6 +20,20 @@ body {
   padding: 24px 0;
   background: #357681;
 }
+.header__account {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #fbfbfb;
+}
+.header__account button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 16px;
+  background: #244f56;
+  color: #fff;
+  cursor: pointe;
+}
 
 .wrapper {
   display: flex;
@@ -53,6 +67,7 @@ body {
   scroll-behavior: smooth;
 }
 .messages .message {
+  position: relative;
   max-width: 75%;
   width: fit-content;
   padding: 8px 14px;
@@ -74,13 +89,60 @@ body {
   font-size: 10px;
 }
 .messages .message-delete {
-  background-color: #6c3638;
+  position: absolute;
+  background-color: rgba(112, 3, 7, 0.71);
   color: #fff;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   padding: 8px;
+  top: -20px;
+  right: -14px;
+  border: none;
+}
+
+.auth-panel {
+  max-width: 440px;
+  margin: 48px auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: #599fb8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.auth-panel h2 {
+  margin-bottom: 20px;
+}
+.auth-panel label {
+  display: block;
+  margin: 14px 0 6px;
+}
+.auth-panel input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 12px;
+}
+
+.auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.auth-actions button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 18px;
+  background: #357681;
+  color: #fff;
+  cursor: pointer;
+}
+
+.auth-error {
+  min-height: 1.4em;
+  margin-top: 12px;
+  color: #7b1717;
 }
 
 .inpt-text {
