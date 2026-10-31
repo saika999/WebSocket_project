@@ -94,7 +94,7 @@ function setAuthenticated(user) {
     logoutButton.hidden = !authenticated;
 
     if (user) {
-        currentUser.textContent = `Вы вошли как ${ user.username }`;
+        currentUser.textContent = `Вы вошли как ${user.username}`;
         authError.textContent = '';
         passwordInput.value = '';
     } else {
@@ -133,7 +133,7 @@ function renderMessage(data) {
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.classList.add('message-delete');
-        deleteButton.textContent = 'Удалить';
+        deleteButton.textContent = '❌';
         deleteButton.setAttribute('aria-label', 'Удалить своё сообщение');
         deleteButton.addEventListener('click', () => {
             if (socket.readyState !== WebSocket.OPEN) {
